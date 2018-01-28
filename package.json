@@ -15,6 +15,7 @@
     "start": "node index.js --",
     "lint": "eslint --ignore-path .gitignore --ignore-pattern node_modules -- .",
     "prettier": "prettier --ignore-path .gitignore --write './**/*.js'",
+    "format": "npm run prettier && npm run lint",
     "test": "exit 1",
     "release:patch": "npm run lint && npx standard-version -r patch && git push --follow-tags origin master",
     "release:minor": "npm run lint && npx standard-version -r minor && git push --follow-tags origin master",
@@ -33,13 +34,16 @@
   },
   "homepage": "https://github.com/antonfisher/utop#readme",
   "dependencies": {
-    "commander": "^2.13.0",
-    "eslint-config-eslint": "^4.0.0"
+    "commander": "2.13.0",
+    "eslint-config-eslint": "4.0.0"
   },
   "devDependencies": {
-    "eslint": "^4.16.0",
-    "eslint-config-prettier": "^2.9.0",
-    "eslint-plugin-prettier": "^2.5.0",
-    "prettier": "^1.10.2"
+    "babel-eslint": "^8.2.1",
+    "blessed": "0.1.81",
+    "blessed-contrib": "4.8.5",
+    "eslint": "4.16.0",
+    "eslint-config-prettier": "2.9.0",
+    "eslint-plugin-prettier": "2.5.0",
+    "prettier": "1.10.2"
   }
 }
