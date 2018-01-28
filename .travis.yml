@@ -1,0 +1,10 @@
+git:
+  depth: 3
+branches:
+  except:
+  - docs
+language: node_js
+node_js:
+  - "8.9.0"
+script:
+  - npm run lint
