@@ -1,0 +1,45 @@
+{
+  "name": "utop",
+  "version": "1.0.0",
+  "author": {
+    "name": "Anton Fisher",
+    "email": "a.fschr@gmail.com",
+    "url": "http://antonfisher.com"
+  },
+  "description": "utop - single process monitoring",
+  "main": "index.js",
+  "engines": {
+    "node": "8.9.0"
+  },
+  "scripts": {
+    "start": "node index.js --",
+    "lint": "eslint --ignore-path .gitignore --ignore-pattern node_modules -- .",
+    "prettier": "prettier --ignore-path .gitignore --write './**/*.js'",
+    "test": "exit 1",
+    "release:patch": "npm run lint && npx standard-version -r patch && git push --follow-tags origin master",
+    "release:minor": "npm run lint && npx standard-version -r minor && git push --follow-tags origin master",
+    "release:major": "npm run lint && npx standard-version -r major && git push --follow-tags origin master"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/antonfisher/utop.git"
+  },
+  "keywords": [
+    "top"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/antonfisher/utop/issues"
+  },
+  "homepage": "https://github.com/antonfisher/utop#readme",
+  "dependencies": {
+    "commander": "^2.13.0",
+    "eslint-config-eslint": "^4.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.16.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-prettier": "^2.5.0",
+    "prettier": "^1.10.2"
+  }
+}
