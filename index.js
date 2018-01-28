@@ -21,7 +21,7 @@ commander
   .action((command, options) => {
     userCommand = command;
     userCommandOptions = options;
-    userFullCommand = `${userCommand}${userCommandOptions.length ? userCommandOptions.join(' ') : ''}`;
+    userFullCommand = `${userCommand}${userCommandOptions.length ? ` ${userCommandOptions.join(' ')}` : ''}`;
   })
   .on('--help', () => {
     console.log('');
