@@ -13,8 +13,9 @@
   },
   "scripts": {
     "start": "node index.js --",
-    "demo": "node index.js --demo -c",
     "debug": "node --inspect index.js --demo -c",
+    "demo": "node index.js --demo -c",
+    "demo:cpu": "node index.js -c -- node ./tests/scriptCpuUsage.js",
     "lint": "eslint --ignore-path .gitignore --ignore-pattern node_modules -- .",
     "prettier": "prettier --ignore-path .gitignore --write './**/*.js'",
     "format": "npm run prettier && npm run lint",
