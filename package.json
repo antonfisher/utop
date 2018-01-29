@@ -13,7 +13,7 @@
   },
   "scripts": {
     "start": "node index.js --",
-    "demo": "node index.js -- tests/print.sh",
+    "demo": "node index.js -c -- tests/print.sh",
     "lint": "eslint --ignore-path .gitignore --ignore-pattern node_modules -- .",
     "prettier": "prettier --ignore-path .gitignore --write './**/*.js'",
     "format": "npm run prettier && npm run lint",
@@ -35,14 +35,14 @@
   },
   "homepage": "https://github.com/antonfisher/utop#readme",
   "dependencies": {
+    "blessed": "0.1.81",
     "commander": "2.13.0",
-    "eslint-config-eslint": "4.0.0"
+    "sparkline": "0.2.0"
   },
   "devDependencies": {
-    "babel-eslint": "^8.2.1",
-    "blessed": "0.1.81",
-    "blessed-contrib": "4.8.5",
+    "babel-eslint": "8.2.1",
     "eslint": "4.16.0",
+    "eslint-config-eslint": "4.0.0",
     "eslint-config-prettier": "2.9.0",
     "eslint-plugin-prettier": "2.5.0",
     "prettier": "1.10.2"

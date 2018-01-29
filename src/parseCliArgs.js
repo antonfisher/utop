@@ -2,7 +2,7 @@
 
 const commander = require('commander');
 
-const DEFAULT_UPDATE_INTERVAL_SECONDS = 1;
+const DEFAULT_OPTION_INTERVAL = 0.5;
 
 function parseCliArgs({version, description}, callback) {
   let userCommand = {};
@@ -10,7 +10,8 @@ function parseCliArgs({version, description}, callback) {
   commander
     .description(description)
     .usage('[options] <command>')
-    .option('-i, --interval <n>', 'update interval in seconds', (i) => parseInt(i, 10), DEFAULT_UPDATE_INTERVAL_SECONDS)
+    .option('-i, --interval <n>', 'update interval in seconds', (i) => parseFloat(i), DEFAULT_OPTION_INTERVAL)
+    .option('-c, --compact', 'use compact layout')
     .version(version, '-v, --version')
     .arguments('<command> [options...]')
     .action((command, args) => {
@@ -38,7 +39,8 @@ function parseCliArgs({version, description}, callback) {
   process.nextTick(() =>
     callback({
       userCommand,
-      interval: commander.interval
+      interval: commander.interval,
+      compact: commander.compact
     })
   );
 }
