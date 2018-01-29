@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 'use strict';
 
 const pidUsage = require('pidusage');
@@ -43,13 +45,15 @@ parseCliArgs({version, description}, ({userCommand, compact, interval, demo}) =>
     userProcess = new ChildProcess(userCommand);
     setInterval(() => {
       pidUsage.stat(userProcess.pid, (err, stat) => {
-        ui.addCpu(stat.cpu);
-        ui.addMem(Math.ceil(stat.memory / 1024 / 1024)); //Mb
+        if (!err) {
+          ui.addCpu(stat.cpu);
+          ui.addMem(Math.ceil(stat.memory / 1024 / 1024)); //Mb
+        }
       });
     }, interval * 1000);
   }
 
-  ui.on('exit', () => processExit(0));
+  ui.on('exit', () => processExit());
   ui.on('scrolledUp', () => userProcess.enableOutputBuffer());
   ui.on('scrolledDown', () => userProcess.disableOutputBuffer());
 

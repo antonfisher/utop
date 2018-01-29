@@ -7,6 +7,7 @@
     "url": "http://antonfisher.com"
   },
   "description": "utop - single process monitoring",
+  "bin": "index.js",
   "main": "index.js",
   "engines": {
     "node": "8.9.0"
@@ -20,6 +21,7 @@
     "prettier": "prettier --ignore-path .gitignore --write './**/*.js'",
     "format": "npm run prettier && npm run lint",
     "test": "exit 1",
+    "test:install-dev-to-global": "sudo npm -g remove utop && sudo npm install -g ./ && npm list -g --depth 0",
     "release:patch": "npm run lint && npx standard-version -r patch && git push --follow-tags origin master",
     "release:minor": "npm run lint && npx standard-version -r minor && git push --follow-tags origin master",
     "release:major": "npm run lint && npx standard-version -r major && git push --follow-tags origin master"
