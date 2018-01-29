@@ -13,7 +13,6 @@
   },
   "scripts": {
     "start": "node index.js --",
-    "demo": "node index.js -c -- tests/print.sh",
     "lint": "eslint --ignore-path .gitignore --ignore-pattern node_modules -- .",
     "prettier": "prettier --ignore-path .gitignore --write './**/*.js'",
     "format": "npm run prettier && npm run lint",

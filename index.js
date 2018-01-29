@@ -5,14 +5,8 @@ const parseCliArgs = require('./src/parseCliArgs');
 const UI = require('./src/UI');
 const ChildProcess = require('./src/ChildProcess');
 
-parseCliArgs({version, description}, ({userCommand, compact, interval}) => {
-  const ui = new UI({
-    command: userCommand.fullCommand,
-    compact,
-    version
-  });
-
-  const userProcess = new ChildProcess(userCommand);
+parseCliArgs({version, description}, ({userCommand, compact, interval, demo}) => {
+  let userProcess;
 
   const processExit = (code = 0, message) => {
     ui.destroy();
@@ -27,9 +21,25 @@ parseCliArgs({version, description}, ({userCommand, compact, interval}) => {
 
   const printError = (err) => {
     ui.addLog('');
-    //ui.addLog('ERROR:', {error: true});
     ui.addLog(err, {error: true});
   };
+
+  const ui = new UI({
+    command: demo ? 'UTop {blink}DEMO{/blink}' : userCommand.fullCommand,
+    compact,
+    version
+  });
+
+  if (demo) {
+    userProcess = new ChildProcess({
+      command: 'node',
+      args: ['./tests/demoPrintDate.js']
+    });
+    setInterval(() => ui.addCpu((Math.sin(+new Date() / 1000) + 1) / 2 * 100), interval * 1000);
+    setInterval(() => ui.addMem(Math.random() * 100), interval * 1000);
+  } else {
+    userProcess = new ChildProcess(userCommand);
+  }
 
   ui.on('exit', () => processExit(0));
   ui.on('scrolledUp', () => userProcess.enableOutputBuffer());
@@ -39,8 +49,4 @@ parseCliArgs({version, description}, ({userCommand, compact, interval}) => {
   userProcess.on('stderr', (err) => printError(err));
   userProcess.on('exit', (message) => printError(message));
   userProcess.on('error', (err) => printError(err));
-
-  //test
-  setInterval(() => ui.addCpu((Math.sin(+new Date() / 1000) + 1) / 2 * 100), interval * 1000);
-  setInterval(() => ui.addMem(Math.random() * 100), interval * 1000);
 });

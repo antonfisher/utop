@@ -12,6 +12,7 @@ function parseCliArgs({version, description}, callback) {
     .usage('[options] <command>')
     .option('-i, --interval <n>', 'update interval in seconds', (i) => parseFloat(i), DEFAULT_OPTION_INTERVAL)
     .option('-c, --compact', 'use compact layout')
+    .option('--demo', 'run program in demo mode')
     .version(version, '-v, --version')
     .arguments('<command> [options...]')
     .action((command, args) => {
@@ -32,7 +33,7 @@ function parseCliArgs({version, description}, callback) {
 
   commander.parse(process.argv);
 
-  if (!userCommand.command) {
+  if (!userCommand.command && !commander.demo) {
     commander.help();
   }
 
@@ -40,7 +41,8 @@ function parseCliArgs({version, description}, callback) {
     callback({
       userCommand,
       interval: commander.interval,
-      compact: commander.compact
+      compact: commander.compact,
+      demo: commander.demo
     })
   );
 }
