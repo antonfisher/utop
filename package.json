@@ -15,7 +15,7 @@
     "start": "node index.js --",
     "debug": "node --inspect index.js --demo -c",
     "demo": "node index.js --demo -c",
-    "demo:cpu": "node index.js -c -- node ./tests/scriptCpuUsage.js",
+    "demo:cpu": "node index.js -c -- node ./tests/scriptCpuMemUsage.js",
     "lint": "eslint --ignore-path .gitignore --ignore-pattern node_modules -- .",
     "prettier": "prettier --ignore-path .gitignore --write './**/*.js'",
     "format": "npm run prettier && npm run lint",

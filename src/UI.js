@@ -115,6 +115,7 @@ class UI extends EventEmitter {
     if (this.props.compact) {
       this._uiCpuChart = this._renderSparkline({
         top: calculateTop(2),
+        maxValue: 100,
         title: 'CPU:',
         postfix: '%'
       });

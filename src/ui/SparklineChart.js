@@ -6,7 +6,7 @@ const sparkline = require('sparkline');
 class SparklineChart {
   constructor({
     title,
-    maxValue = 100,
+    maxValue = 0,
     valuePadding = 7,
     postfix = '',
     colorOk = 'yellow',
@@ -32,7 +32,7 @@ class SparklineChart {
 
     this._dataArray = new Array(countLimit).fill(0);
 
-    // first one is allways 100% for the right 0-100% scale
+    // first one is allways 100% for the right 0-maxValue scale
     this._dataArray[0] = this.maxValue;
   }
 
@@ -42,7 +42,7 @@ class SparklineChart {
       .map((s, i) => {
         if (i === 0) {
           return ''; // do transparent first one fake value
-        } else if (this._dataArray[i] > 50) {
+        } else if (this.maxValue && this._dataArray[i] > this.maxValue * 0.66) {
           return `{${this.colorWarn}-fg}${s}{/${this.colorWarn}-fg}`;
         } else {
           return `{${this.colorOk}-fg}${s}{/${this.colorOk}-fg}`;
@@ -66,7 +66,11 @@ class SparklineChart {
   }
 
   add(value) {
-    const validatedValue = Math.min(Math.ceil(value), this.maxValue);
+    let validatedValue = Math.ceil(value);
+    if (this.maxValue) {
+      validatedValue = Math.min(validatedValue, this.maxValue);
+    }
+
     this._dataArray.push(validatedValue);
     this._dataArray.shift();
     this._dataArray[0] = this.maxValue;
