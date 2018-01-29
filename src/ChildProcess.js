@@ -30,6 +30,7 @@ class ChildProcess extends EventEmitter {
     let bufferedOutput = [];
 
     this.process = spawn(this.props.command, this.props.args);
+    this.pid = this.process.pid;
 
     this.process.stdout.on('data', (data) => {
       str += data.toString();

@@ -2,7 +2,7 @@
 
 const commander = require('commander');
 
-const DEFAULT_OPTION_INTERVAL = 0.5;
+const DEFAULT_OPTION_INTERVAL = 1;
 
 function parseCliArgs({version, description}, callback) {
   let userCommand = {};

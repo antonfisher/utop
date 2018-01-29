@@ -39,6 +39,7 @@
   "dependencies": {
     "blessed": "0.1.81",
     "commander": "2.13.0",
+    "pidusage": "1.2.0",
     "sparkline": "0.2.0"
   },
   "devDependencies": {

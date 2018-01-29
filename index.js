@@ -1,5 +1,7 @@
 'use strict';
 
+const pidUsage = require('pidusage');
+
 const {version, description} = require('./package.json');
 const parseCliArgs = require('./src/parseCliArgs');
 const UI = require('./src/UI');
@@ -39,6 +41,12 @@ parseCliArgs({version, description}, ({userCommand, compact, interval, demo}) =>
     setInterval(() => ui.addMem(Math.random() * 100), interval * 1000);
   } else {
     userProcess = new ChildProcess(userCommand);
+    setInterval(() => {
+      pidUsage.stat(userProcess.pid, (err, stat) => {
+        ui.addCpu(stat.cpu);
+        ui.addMem(Math.ceil(stat.memory / 1024 / 1024)); //Mb
+      });
+    }, interval * 1000);
   }
 
   ui.on('exit', () => processExit(0));
