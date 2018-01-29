@@ -33,7 +33,7 @@ parseCliArgs({version, description}, ({userCommand, compact, interval, demo}) =>
   if (demo) {
     userProcess = new ChildProcess({
       command: 'node',
-      args: ['./tests/demoPrintDate.js']
+      args: ['./tests/scriptDemoPrintDate.js']
     });
     setInterval(() => ui.addCpu((Math.sin(+new Date() / 1000) + 1) / 2 * 100), interval * 1000);
     setInterval(() => ui.addMem(Math.random() * 100), interval * 1000);
