@@ -25,7 +25,7 @@ class UI extends EventEmitter {
 
   _init() {
     this.screen = blessed.screen({smartCSR: true});
-    this.screen.title = `utop: ${this.props.command}`;
+    this.screen.title = `UTop: ${this.props.command}`;
     this.screen.key(['escape', 'q', 'C-c'], () => this.emit('exit'));
   }
 

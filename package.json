@@ -42,7 +42,9 @@
     "blessed": "0.1.81",
     "commander": "2.13.0",
     "pidusage": "1.2.0",
-    "sparkline": "0.2.0"
+    "ps-tree": "1.1.0",
+    "sparkline": "0.2.0",
+    "terminate": "2.1.0"
   },
   "devDependencies": {
     "babel-eslint": "8.2.1",

@@ -3,7 +3,10 @@
 const EventEmitter = require('events');
 const {spawn} = require('child_process');
 
-class ChildProcess extends EventEmitter {
+const psTree = require('ps-tree');
+const terminate = require('terminate');
+
+class UserProcess extends EventEmitter {
   constructor({command, args, fullCommand}) {
     super();
 
@@ -21,8 +24,12 @@ class ChildProcess extends EventEmitter {
     this.doBufferOutput = false;
   }
 
-  kill() {
-    this.process.kill();
+  kill(callback) {
+    if (this.process) {
+      terminate(this.process.pid, callback);
+    } else {
+      callback();
+    }
   }
 
   _run() {
@@ -30,7 +37,6 @@ class ChildProcess extends EventEmitter {
     let bufferedOutput = [];
 
     this.process = spawn(this.props.command, this.props.args);
-    this.pid = this.process.pid;
 
     this.process.stdout.on('data', (data) => {
       str += data.toString();
@@ -68,4 +74,4 @@ class ChildProcess extends EventEmitter {
   }
 }
 
-module.exports = ChildProcess;
+module.exports = UserProcess;
