@@ -28,7 +28,7 @@ class SparklineChart {
   }
 
   _init() {
-    const countLimit = this.screen.width - this.title.length - this.valuePadding;
+    const countLimit = Math.max(this.screen.width - this.title.length - this.valuePadding, 1);
 
     this._dataArray = new Array(countLimit).fill(0);
 

@@ -4,10 +4,11 @@ const os = require('os');
 const {resolve} = require('path');
 const {spawn} = require('child_process');
 
+const scriptPath = resolve(__dirname, './scriptLoadCpuMem.js');
+
 const childProcesses = [];
 
 function run(title) {
-  const scriptPath = resolve(__dirname, './scriptLoadCpuMem.js');
 
   console.log(`Run child process: ${title} ${scriptPath}`);
 

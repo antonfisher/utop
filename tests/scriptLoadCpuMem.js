@@ -1,7 +1,7 @@
 'use strict';
 
 const INTERVAL = 2000;
-const START_POWER = 18;
+const START_POWER = 20;
 
 let power = START_POWER;
 let changeDirection = 1;
@@ -12,7 +12,7 @@ const calculate = () => {
   console.log(`${message} ...`);
   let value = 1;
   for (let i = 0; i < 2 ** power; i++) {
-    value *= Math.random();
+    value *= Math.sqrt(Math.random());
   }
   new Array(2 ** power).fill(' ');
   const ms = +new Date() - startDate;
