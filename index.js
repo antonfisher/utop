@@ -74,6 +74,8 @@ parseCliArgs({version, description, homepage}, ({parsedUserCommand, options}) =>
     .on('error', (message) => uiLayout.addError(message))
     .run();
 
+  uiLayout.setPid(userProcess.process.pid);
+
   statsCollelector = new StatsCollelector({
     pid: userProcess.process.pid,
     interval: options.interval * 1000

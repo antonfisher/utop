@@ -2,6 +2,7 @@
 
 const EventEmitter = require('events');
 const blessed = require('blessed');
+const Header = require('./ui/Header');
 const SparklineChart = require('./ui/SparklineChart');
 
 function createTopCalculator() {
@@ -24,15 +25,14 @@ class UI extends EventEmitter {
 
   _init() {
     this.screen = blessed.screen({smartCSR: true});
-    //this.screen.title = `UTop: ${this.props.command}`;
     this.screen.key(['escape', 'q', 'C-c'], () => this.emit('exit'));
   }
 
   _renderTitle(props) {
-    return blessed.text({
-      parent: this.screen,
-      tags: true,
-      content: `{bold}${this.props.command}{/bold}{|}UTop ver.${this.props.version}`,
+    return new Header({
+      screen: this.screen,
+      command: this.props.command,
+      version: this.props.version,
       ...props
     });
   }
@@ -126,7 +126,7 @@ class UI extends EventEmitter {
     const chartHeight = Math.ceil(this.screen.height / 4);
     const calculateTop = createTopCalculator();
 
-    this._renderTitle({top: calculateTop(2)});
+    this._uiHeader = this._renderTitle({top: calculateTop(2)});
 
     if (this.props.dashboard) {
       this._renderSectionLine({
@@ -176,6 +176,22 @@ class UI extends EventEmitter {
 
     this.screen.render();
 
+    this._startTime = Math.round(+new Date() / 1000);
+    this._updateTimerInterval = setInterval(() => {
+      const diff = Math.round(+new Date() / 1000) - this._startTime;
+      const seconds = diff % 60;
+      const minutes = ((diff - seconds) / 60) % 60;
+      const hours = Math.floor(diff / 60 / 60);
+      this._uiHeader.update({
+        time: [hours, minutes, seconds].map((i) => i.toString().padStart(2, '0')).join(':')
+      });
+    }, 1000);
+
+    return this;
+  }
+
+  setPid(pid) {
+    this._uiHeader.update({pid});
     return this;
   }
 
@@ -201,6 +217,7 @@ class UI extends EventEmitter {
   }
 
   destroy() {
+    clearInterval(this._updateTimerInterval);
     this.screen.destroy();
   }
 }
