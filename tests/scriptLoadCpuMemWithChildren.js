@@ -1,14 +1,17 @@
 'use strict';
 
+const os = require('os');
 const {resolve} = require('path');
 const {spawn} = require('child_process');
 
 const childProcesses = [];
 
 function run(title) {
-  console.log(`Run child process: ${title}`, resolve(__dirname, './scriptCpuMemUsage.js'));
+  const scriptPath = resolve(__dirname, './scriptLoadCpuMem.js');
 
-  const childProcess = spawn('node', [resolve(__dirname, './scriptCpuMemUsage.js')]);
+  console.log(`Run child process: ${title} ${scriptPath}`);
+
+  const childProcess = spawn('node', [scriptPath]);
 
   console.log(`Child process ${title} pid: ${childProcess.pid}`);
 
@@ -21,7 +24,9 @@ function run(title) {
 }
 
 console.log(`Parent process pid: ${process.pid}`);
-run('A');
-run('B');
-run('C');
-run('D');
+
+const cpuCount = os.cpus().length;
+
+for (let i = 0; i < cpuCount - 1 || i === 0; i++) {
+  run(i + 1);
+}

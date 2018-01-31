@@ -14,9 +14,9 @@
   },
   "scripts": {
     "start": "node index.js --",
-    "debug": "node --inspect index.js --demo -c",
-    "demo": "node index.js --demo -c",
-    "demo:cpu": "node index.js -c -- node ./tests/scriptCpuMemUsage.js",
+    "debug": "node --inspect index.js --demo",
+    "demo": "node index.js --demo",
+    "demo:cpu": "node index.js -- node ./tests/scriptLoadCpuMemWithChildren.js",
     "lint": "eslint --ignore-path .gitignore --ignore-pattern node_modules -- .",
     "prettier": "prettier --ignore-path .gitignore --write './**/*.js'",
     "format": "npm run prettier && npm run lint",
@@ -37,7 +37,7 @@
   "bugs": {
     "url": "https://github.com/antonfisher/utop/issues"
   },
-  "homepage": "https://github.com/antonfisher/utop#readme",
+  "homepage": "https://github.com/antonfisher/utop",
   "dependencies": {
     "blessed": "0.1.81",
     "commander": "2.13.0",

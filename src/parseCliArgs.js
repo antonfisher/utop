@@ -2,21 +2,36 @@
 
 const commander = require('commander');
 
-const DEFAULT_OPTION_INTERVAL = 1;
+const DEFAULT_OPTION_INTERVAL = 0.5;
 
-function parseCliArgs({version, description}, callback) {
-  let userCommand = {};
+function addRestParamsToArgs(command, parsedArgs, rawArgs) {
+  let args = parsedArgs;
+  const userCommandPosition = rawArgs.indexOf(command);
+  if (parsedArgs.length === 0 && userCommandPosition < rawArgs.length - 1) {
+    args = rawArgs.slice(userCommandPosition + 1);
+  }
+  return args;
+}
+
+function parseCliArgs({version, description, homepage}, callback) {
+  let parsedUserCommand = {};
 
   commander
-    .description(description)
+    .description(`${description} (${homepage})`)
     .usage('[options] <command>')
-    .option('-i, --interval <n>', 'update interval in seconds', (i) => parseFloat(i), DEFAULT_OPTION_INTERVAL)
-    .option('-c, --compact', 'use compact layout')
+    .option(
+      '-i, --interval <n>',
+      'update interval in seconds',
+      (i) => Math.max(parseFloat(i), 0.1),
+      DEFAULT_OPTION_INTERVAL
+    )
+    .option('-d, --dashboard', 'use dashboard layout')
     .option('--demo', 'run program in demo mode')
     .version(version, '-v, --version')
-    .arguments('<command> [options...]')
-    .action((command, args) => {
-      userCommand = {
+    .arguments('<command> [options...] *')
+    .action((command, parsedArgs, {rawArgs}) => {
+      const args = addRestParamsToArgs(command, parsedArgs, rawArgs);
+      parsedUserCommand = {
         command,
         args,
         fullCommand: `${command}${args.length ? ` ${args.join(' ')}` : ''}`
@@ -27,24 +42,25 @@ function parseCliArgs({version, description}, callback) {
       console.log('  Examples:');
       console.log('');
       console.log('    $ utop npm start');
-      console.log('    $ utop -i 3 node server.js');
+      console.log('    $ utop -d -- node --inspect server.js');
+      console.log('    $ utop -i 5 -- tail -f /var/log/syslog');
       console.log('');
     });
 
   commander.parse(process.argv);
 
-  if (!userCommand.command && !commander.demo) {
+  if (!parsedUserCommand.command && !commander.demo) {
     commander.help();
   }
 
-  process.nextTick(() =>
-    callback({
-      userCommand,
+  callback({
+    parsedUserCommand,
+    options: {
       interval: commander.interval,
-      compact: commander.compact,
+      dashboard: commander.dashboard,
       demo: commander.demo
-    })
-  );
+    }
+  });
 }
 
 module.exports = parseCliArgs;

@@ -1,7 +1,7 @@
 'use strict';
 
 const INTERVAL = 2000;
-const START_POWER = 16;
+const START_POWER = 18;
 
 let power = START_POWER;
 let changeDirection = 1;
@@ -17,8 +17,9 @@ const calculate = () => {
   new Array(2 ** power).fill(' ');
   const ms = +new Date() - startDate;
   console.log(`${message} takes: ${ms}ms`);
-  if (ms > INTERVAL * 1.5 || power < START_POWER) {
-    changeDirection = -changeDirection;
+  if (ms > INTERVAL * 5 || power < START_POWER) {
+    changeDirection = -changeDirection; // waves
+    //changeDirection = 0;   // climb
   }
   power += changeDirection;
   setTimeout(calculate, INTERVAL);

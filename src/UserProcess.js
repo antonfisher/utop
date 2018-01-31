@@ -3,7 +3,6 @@
 const EventEmitter = require('events');
 const {spawn} = require('child_process');
 
-const psTree = require('ps-tree');
 const terminate = require('terminate');
 
 class UserProcess extends EventEmitter {
@@ -11,17 +10,6 @@ class UserProcess extends EventEmitter {
     super();
 
     this.props = {command, args, fullCommand};
-    this.doBufferOutput = false;
-
-    this._run();
-  }
-
-  enableOutputBuffer() {
-    this.doBufferOutput = true;
-  }
-
-  disableOutputBuffer() {
-    this.doBufferOutput = false;
   }
 
   kill(callback) {
@@ -32,26 +20,15 @@ class UserProcess extends EventEmitter {
     }
   }
 
-  _run() {
+  run() {
     let str = '';
-    let bufferedOutput = [];
 
     this.process = spawn(this.props.command, this.props.args);
 
     this.process.stdout.on('data', (data) => {
       str += data.toString();
       if (str.includes('\n')) {
-        if (this.doBufferOutput) {
-          bufferedOutput.push(str);
-        } else {
-          if (bufferedOutput.length > 0) {
-            bufferedOutput.forEach((bufferedStr) => {
-              this.emit('stdout', bufferedStr.replace(/\n$/, ''));
-            });
-            bufferedOutput = [];
-          }
-          this.emit('stdout', str.replace(/\n$/, ''));
-        }
+        this.emit('stdout', str.replace(/\n$/, ''));
         str = '';
       }
     });
@@ -71,6 +48,8 @@ class UserProcess extends EventEmitter {
         this.emit('error', `Failed to run subprocess: (${code}) ${message}`);
       }
     });
+
+    return this;
   }
 }
 

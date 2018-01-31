@@ -2,91 +2,88 @@
 
 'use strict';
 
-const os = require('os');
-const psTree = require('ps-tree');
-const pidUsage = require('pidusage');
+const {resolve} = require('path');
 
-const {version, description} = require('./package.json');
+const {version, description, homepage} = require('./package.json');
+const StatsCollelector = require('./src/StatsCollelector');
 const parseCliArgs = require('./src/parseCliArgs');
-const UI = require('./src/UI');
 const UserProcess = require('./src/UserProcess');
+const UILayout = require('./src/UILayout');
 
-parseCliArgs({version, description}, ({userCommand, compact, interval, demo}) => {
-  let userProcess;
+const DEMO_SCRIPT_PATH = resolve(__dirname, './tests/scriptDemoPrintDate.js');
 
-  const processExit = (code = 0, message) => {
-    ui.destroy();
-    userProcess.kill((err) => {
-      if (err) {
-        console.log(`Cannot kill subprocess, PID:${userProcess.process.pid}, error:`, err);
-      }
-      if (message) {
-        console.log(message);
-      }
-      process.exit(code);
-    });
-  };
+let uiLayout;
+let userProcess;
+let statsCollelector;
+let killing = false;
+let killingAtempts = 0;
 
-  const printError = (err) => {
-    ui.addLog('');
-    ui.addLog(err, {error: true});
-  };
-
-  const ui = new UI({
-    command: demo ? '[UTop DEMO]' : userCommand.fullCommand,
-    compact,
-    version
-  });
-
-  if (demo) {
-    userProcess = new UserProcess({
-      command: 'node',
-      args: ['./tests/scriptDemoPrintDate.js']
-    });
-    setInterval(() => ui.addCpu((Math.sin(+new Date() / 1000) + 1) / 2 * 100), interval * 1000);
-    setInterval(() => ui.addMem(Math.random() * 100), interval * 1000);
-  } else {
-    userProcess = new UserProcess(userCommand);
-    setInterval(() => {
-      let totalCpu = 0;
-      let totalMem = 0;
-
-      psTree(userProcess.process.pid, (err, children) => {
-        if (!err) {
-          children.forEach(({PID}) => {
-            pidUsage.stat(PID, (err, stat) => {
-              if (!err) {
-                totalCpu += stat.cpu;
-                totalMem += Math.ceil(stat.memory / 1024 / 1024); //Mb
-              }
-            });
-          });
-        }
-      });
-
-      pidUsage.stat(userProcess.process.pid, (err, stat) => {
-        if (!err) {
-          totalCpu += stat.cpu;
-          totalMem += Math.ceil(stat.memory / 1024 / 1024); //Mb
-        }
-      });
-
-      setTimeout(() => {
-        ui.addCpu(totalCpu / os.cpus().length);
-        ui.addMem(totalMem);
-      }, interval * 900);
-    }, interval * 1000);
+function exitProcess(err) {
+  if (err) {
+    console.log('ERROR:', err); //TODO red
   }
 
-  ui.on('exit', () => processExit());
-  ui.on('scrolledUp', () => userProcess.enableOutputBuffer());
-  ui.on('scrolledDown', () => userProcess.disableOutputBuffer());
+  if (killing && killingAtempts > 2) {
+    console.log(`Force process exit. Subprocess PID is ${userProcess.process.pid}.`); //TODO red
+    process.exit();
+  }
+  killing = true;
+  killingAtempts++;
 
-  userProcess.on('stdout', (output) => ui.addLog(output));
-  userProcess.on('stderr', (err) => printError(err));
-  userProcess.on('exit', (message) => printError(message));
-  userProcess.on('error', (err) => printError(err));
+  if (statsCollelector) {
+    statsCollelector.destroy();
+  }
+  if (uiLayout) {
+    uiLayout.destroy();
+  }
+  if (userProcess) {
+    console.log(`Exiting subprocess, PID ${userProcess.process.pid}...`);
+    userProcess.kill((err) => {
+      if (err) {
+        console.log(`Cannot kill subprocess, PID ${userProcess.process.pid}, error:`, err.toString()); //TODO red
+      }
+      process.exit(err ? 1 : 0);
+    });
+  } else {
+    process.exit(err ? 1 : 0);
+  }
+}
 
-  process.on('SIGINT', () => processExit());
-  process.on('SIGTERM', () => processExit());
+process.on('unhandledRejection', exitProcess);
+process.on('uncaughtException', exitProcess);
+
+parseCliArgs({version, description, homepage}, ({parsedUserCommand, options}) => {
+  let userCommand = parsedUserCommand;
+
+  if (options.demo) {
+    userCommand = {command: 'node', args: [DEMO_SCRIPT_PATH]};
+  }
+
+  uiLayout = new UILayout({
+    command: options.demo ? '[UTop DEMO]' : userCommand.fullCommand,
+    dashboard: options.dashboard,
+    version
+  })
+    .on('exit', () => exitProcess())
+    .render();
+
+  userProcess = new UserProcess(userCommand)
+    .on('stdout', (message) => uiLayout.addLog(message))
+    .on('stderr', (message) => uiLayout.addError(message))
+    .on('exit', (message) => uiLayout.addError(message))
+    .on('error', (message) => uiLayout.addError(message))
+    .run();
+
+  statsCollelector = new StatsCollelector({
+    pid: userProcess.process.pid,
+    interval: options.interval * 1000
+  }).on('stats', ({cpu, mem}) => uiLayout.addCpu(cpu).addMem(mem));
+
+  if (options.demo) {
+    statsCollelector.demo();
+  } else {
+    statsCollelector.run();
+  }
+
+  process.on('SIGINT', () => exitProcess()).on('SIGTERM', () => exitProcess());
 });

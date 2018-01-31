@@ -14,18 +14,17 @@ function createTopCalculator() {
 }
 
 class UI extends EventEmitter {
-  constructor({command, compact, version}) {
+  constructor({command, dashboard, version}) {
     super();
 
-    this.props = {command, compact, version};
+    this.props = {command, dashboard, version};
 
     this._init();
-    this._render();
   }
 
   _init() {
     this.screen = blessed.screen({smartCSR: true});
-    this.screen.title = `UTop: ${this.props.command}`;
+    //this.screen.title = `UTop: ${this.props.command}`;
     this.screen.key(['escape', 'q', 'C-c'], () => this.emit('exit'));
   }
 
@@ -88,46 +87,48 @@ class UI extends EventEmitter {
       ...props
     });
 
+    let doBufferOutput = false;
+
     let maxScroll = 0;
     logBox.on('scroll', () => {
       maxScroll = Math.max(maxScroll, logBox.getScroll());
     });
-    logBox.on('wheeldown', () => {
-      if (logBox.getScroll() === maxScroll) {
-        this.emit('scrolledDown');
-      }
-    });
     logBox.on('wheelup', () => {
       if (logBox.getScroll() !== maxScroll) {
-        this.emit('scrolledUp');
+        doBufferOutput = true;
       }
     });
+    logBox.on('wheeldown', () => {
+      if (logBox.getScroll() === maxScroll) {
+        doBufferOutput = false;
+      }
+    });
+
+    let bufferedOutput = [];
+    logBox.log = (str) => {
+      if (doBufferOutput) {
+        bufferedOutput.push(str);
+      } else {
+        if (bufferedOutput.length > 0) {
+          bufferedOutput.forEach((bufferedStr) => {
+            logBox.add(bufferedStr.replace(/\n$/, ''));
+          });
+          bufferedOutput = [];
+        }
+        logBox.add(str.replace(/\n$/, ''));
+      }
+    };
 
     return logBox;
   }
 
-  _render() {
+  render() {
     const chartHeight = Math.ceil(this.screen.height / 4);
     const calculateTop = createTopCalculator();
 
     this._renderTitle({top: calculateTop(2)});
 
-    if (this.props.compact) {
-      this._uiCpuChart = this._renderSparkline({
-        top: calculateTop(2),
-        maxValue: 100,
-        title: 'CPU:',
-        postfix: '%'
-      });
-
-      this._uiMemChart = this._renderSparkline({
-        top: calculateTop(2),
-        title: 'Mem:',
-        postfix: 'Mb', //TODO replace
-        colorOk: 'cyan',
-        colorWarn: 'blue'
-      });
-    } else {
+    if (this.props.dashboard) {
       this._renderSectionLine({
         top: calculateTop(1),
         label: 'CPU'
@@ -147,12 +148,25 @@ class UI extends EventEmitter {
         top: calculateTop(chartHeight),
         height: chartHeight
       });
-    }
 
-    if (!this.props.compact) {
       this._renderSectionLine({
         top: calculateTop(1),
         label: 'Log'
+      });
+    } else {
+      this._uiCpuChart = this._renderSparkline({
+        top: calculateTop(2),
+        maxValue: 100,
+        title: 'CPU:',
+        postfix: '%'
+      });
+
+      this._uiMemChart = this._renderSparkline({
+        top: calculateTop(2),
+        title: 'Mem:',
+        postfix: 'Mb', //TODO replace
+        colorOk: 'cyan',
+        colorWarn: 'blue'
       });
     }
 
@@ -161,22 +175,29 @@ class UI extends EventEmitter {
     });
 
     this.screen.render();
+
+    return this;
   }
 
   addCpu(value) {
     this._uiCpuChart.add(value);
+    return this;
   }
 
   addMem(value) {
     this._uiMemChart.add(value);
+    return this;
   }
 
-  addLog(log, {error = false} = {}) {
-    let formattedLog = log;
-    if (error) {
-      formattedLog = `{red-fg}${log}{/red-fg}`;
-    }
-    this._uiLogBox.log(formattedLog);
+  addLog(log) {
+    this._uiLogBox.log(log);
+    return this;
+  }
+
+  addError(err) {
+    this._uiLogBox.log('');
+    this._uiLogBox.log(`{red-fg}${err}{/red-fg}`);
+    return this;
   }
 
   destroy() {
