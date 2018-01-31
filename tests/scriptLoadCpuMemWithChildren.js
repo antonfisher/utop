@@ -9,7 +9,6 @@ const scriptPath = resolve(__dirname, './scriptLoadCpuMem.js');
 const childProcesses = [];
 
 function run(title) {
-
   console.log(`Run child process: ${title} ${scriptPath}`);
 
   const childProcess = spawn('node', [scriptPath]);
