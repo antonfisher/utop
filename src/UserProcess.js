@@ -38,7 +38,7 @@ class UserProcess extends EventEmitter {
     });
 
     this.process.on('close', (code) => {
-      this.emit('exit', `Child process exited with code: ${code}, press Cmd-C to close UTop.`);
+      this.emit('exit', code);
     });
 
     this.process.on('error', ({code, message}) => {
