@@ -5,7 +5,7 @@
 const {resolve} = require('path');
 
 const {version, description, homepage} = require('./package.json');
-const StatsCollelector = require('./src/StatsCollelector');
+const StatsCollector = require('./src/StatsCollector');
 const parseCliArgs = require('./src/parseCliArgs');
 const UserProcess = require('./src/UserProcess');
 const UILayout = require('./src/UILayout');
@@ -14,7 +14,7 @@ const DEMO_SCRIPT_PATH = resolve(__dirname, './tests/scriptDemoPrintDate.js');
 
 let uiLayout;
 let userProcess;
-let statsCollelector;
+let statsCollector;
 let killing = false;
 let killingAtempts = 0;
 
@@ -30,8 +30,8 @@ function exitProcess(err) {
   killing = true;
   killingAtempts++;
 
-  if (statsCollelector) {
-    statsCollelector.destroy();
+  if (statsCollector) {
+    statsCollector.destroy();
   }
   if (uiLayout) {
     uiLayout.destroy();
@@ -72,8 +72,8 @@ parseCliArgs({version, description, homepage}, ({parsedUserCommand, options}) =>
     .on('stderr', (message) => uiLayout.addError(message))
     .on('error', (message) => {
       uiLayout.addError(message);
-      if (statsCollelector) {
-        statsCollelector.destroy();
+      if (statsCollector) {
+        setTimeout(() => statsCollector.destroy(), options.interval);
       }
     })
     .on('exit', (code) => {
@@ -84,23 +84,23 @@ parseCliArgs({version, description, homepage}, ({parsedUserCommand, options}) =>
       } else {
         uiLayout.addError(message);
       }
-      if (statsCollelector) {
-        statsCollelector.destroy();
+      if (statsCollector) {
+        setTimeout(() => statsCollector.destroy(), options.interval);
       }
     })
     .run();
 
   uiLayout.setPid(userProcess.process.pid);
 
-  statsCollelector = new StatsCollelector({
+  statsCollector = new StatsCollector({
     pid: userProcess.process.pid,
-    interval: options.interval * 1000
+    interval: options.interval
   }).on('stats', ({cpu, mem}) => uiLayout.addCpu(cpu).addMem(mem));
 
   if (options.demo) {
-    statsCollelector.demo();
+    statsCollector.demo();
   } else {
-    statsCollelector.run();
+    statsCollector.run();
   }
 
   process.on('SIGINT', () => exitProcess()).on('SIGTERM', () => exitProcess());

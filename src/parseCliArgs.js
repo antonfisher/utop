@@ -56,7 +56,7 @@ function parseCliArgs({version, description, homepage}, callback) {
   callback({
     parsedUserCommand,
     options: {
-      interval: commander.interval,
+      interval: commander.interval * 1000,
       dashboard: commander.dashboard,
       demo: commander.demo
     }
