@@ -36,7 +36,7 @@ function exitProcess(err) {
   if (uiLayout) {
     uiLayout.destroy();
   }
-  if (userProcess) {
+  if (userProcess && userProcess.process.pid) {
     console.log(`Exiting subprocess, PID ${userProcess.process.pid}...`);
     userProcess.kill((err) => {
       if (err) {

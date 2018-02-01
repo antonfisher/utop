@@ -14,7 +14,7 @@ class UserProcess extends EventEmitter {
 
   kill(callback) {
     if (this.process) {
-      terminate(this.process.pid, callback);
+      terminate(this.process.pid, (err) => callback(!err || err.code === 'ESRCH' ? null : err));
     } else {
       callback();
     }
