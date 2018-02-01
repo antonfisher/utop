@@ -16,16 +16,16 @@
     "start": "node index.js --",
     "demo": "node index.js --demo",
     "debug": "node --inspect index.js --demo",
-    "lint": "eslint --ignore-path .gitignore --ignore-pattern node_modules -- .",
+    "lint": "eslint --ignore-path .gitignore -- .",
     "prettier": "prettier --ignore-path .gitignore --write './**/*.js'",
     "format": "npm run prettier && npm run lint",
     "test": "exit 1",
     "test:cpu": "node index.js -- node ./tests/scriptLoadCpuMemWithChildren.js",
     "test:stress": "node index.js -- stress -c 3 -m 3 --vm-hang 0 --vm-bytes 1g -t 10",
     "test:install-dev-to-global": "sudo npm -g remove utop && sudo npm install -g ./ && npm list -g --depth 0",
-    "release:patch": "npm run lint && npx standard-version -r patch && git push --follow-tags origin master",
-    "release:minor": "npm run lint && npx standard-version -r minor && git push --follow-tags origin master",
-    "release:major": "npm run lint && npx standard-version -r major && git push --follow-tags origin master"
+    "release:patch": "npm run format && npx standard-version -r patch && git push --follow-tags origin master",
+    "release:minor": "npm run format && npx standard-version -r minor && git push --follow-tags origin master",
+    "release:major": "npm run format && npx standard-version -r major && git push --follow-tags origin master"
   },
   "repository": {
     "type": "git",
