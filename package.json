@@ -8,7 +8,6 @@
   },
   "description": "utop - single process monitoring",
   "bin": "index.js",
-  "main": "index.js",
   "engines": {
     "node": "8.9.0"
   },
