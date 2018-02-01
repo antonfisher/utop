@@ -70,7 +70,12 @@ parseCliArgs({version, description, homepage}, ({parsedUserCommand, options}) =>
   userProcess = new UserProcess(userCommand)
     .on('stdout', (message) => uiLayout.addLog(message))
     .on('stderr', (message) => uiLayout.addError(message))
-    .on('error', (message) => uiLayout.addError(message))
+    .on('error', (message) => {
+      uiLayout.addError(message);
+      if (statsCollelector) {
+        statsCollelector.destroy();
+      }
+    })
     .on('exit', (code) => {
       const message = `Child process exited with code: ${code}, press Cmd-C to close UTop.`;
       if (code === 0) {
@@ -78,6 +83,9 @@ parseCliArgs({version, description, homepage}, ({parsedUserCommand, options}) =>
         uiLayout.addLog(message); //TODO green
       } else {
         uiLayout.addError(message);
+      }
+      if (statsCollelector) {
+        statsCollelector.destroy();
       }
     })
     .run();
