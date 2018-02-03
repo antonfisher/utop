@@ -2,8 +2,11 @@
 
 const EventEmitter = require('events');
 const blessed = require('blessed');
+const formatBytes = require('./formatBytes');
 const Header = require('./ui/Header');
 const SparklineChart = require('./ui/SparklineChart');
+
+const SPARKLINE_VALUE_PADDING = 6;
 
 function createTopCalculator() {
   let top = 0;
@@ -65,7 +68,7 @@ class UILayout extends EventEmitter {
   }
 
   _renderSparkline(props) {
-    return new SparklineChart({screen: this.screen, ...props});
+    return new SparklineChart({screen: this.screen, valuePadding: SPARKLINE_VALUE_PADDING, ...props});
   }
 
   _renderLogBox(props) {
@@ -157,14 +160,12 @@ class UILayout extends EventEmitter {
       this._uiCpuChart = this._renderSparkline({
         top: calculateTop(2),
         maxValue: 100,
-        title: 'CPU:',
-        postfix: '%'
+        title: 'CPU:'
       });
 
       this._uiMemChart = this._renderSparkline({
         top: calculateTop(2),
         title: 'Mem:',
-        postfix: 'Mb', //TODO replace
         colorOk: 'cyan',
         colorWarn: 'blue'
       });
@@ -196,12 +197,19 @@ class UILayout extends EventEmitter {
   }
 
   addCpu(value) {
-    this._uiCpuChart.add(value);
+    this._uiCpuChart.add(
+      value,
+      Math.round(value)
+        .toString()
+        .padStart(SPARKLINE_VALUE_PADDING - 1, ' '),
+      '%'
+    );
     return this;
   }
 
   addMem(value) {
-    this._uiMemChart.add(value);
+    const [textValue, postfix] = formatBytes(value, SPARKLINE_VALUE_PADDING);
+    this._uiMemChart.add(value, textValue.padStart(SPARKLINE_VALUE_PADDING - postfix.length, ' '), postfix);
     return this;
   }
 

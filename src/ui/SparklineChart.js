@@ -4,20 +4,10 @@ const blessed = require('blessed');
 const sparkline = require('sparkline');
 
 class SparklineChart {
-  constructor({
-    title,
-    maxValue = 0,
-    valuePadding = 7,
-    postfix = '',
-    colorOk = 'yellow',
-    colorWarn = 'red',
-    screen,
-    ...props
-  }) {
+  constructor({title, maxValue = 0, valuePadding = 6, colorOk = 'yellow', colorWarn = 'red', screen, ...props}) {
     this.title = title;
     this.maxValue = maxValue;
     this.valuePadding = valuePadding;
-    this.postfix = postfix;
     this.colorOk = colorOk;
     this.colorWarn = colorWarn;
     this.screen = screen;
@@ -35,7 +25,7 @@ class SparklineChart {
   }
 
   _init() {
-    const countLimit = Math.max(this.screen.width - this.title.length - this.valuePadding, 1);
+    const countLimit = Math.max(this.screen.width - this.title.length - this.valuePadding - 1, 1);
 
     let oldDataArray = this._dataArray;
     if (oldDataArray.length > countLimit) {
@@ -45,7 +35,7 @@ class SparklineChart {
     this._dataArray = new Array(countLimit - oldDataArray.length).fill(0).concat(oldDataArray);
   }
 
-  _render(value = 0) {
+  _render(value = 0, printValue = '', postfix = '') {
     // first one is allways 100% for the right 0-maxValue scale
     const graphString = sparkline([this.maxValue].concat(this._dataArray.slice(1)))
       .split('')
@@ -60,7 +50,7 @@ class SparklineChart {
       })
       .join('');
 
-    const content = `${this.title} ${graphString} {bold}${value}{/bold}${this.postfix}`;
+    const content = `${this.title} ${graphString} {bold}${printValue}{/bold}${postfix}`;
 
     if (this._chart) {
       this._chart.setContent(content);
@@ -75,15 +65,15 @@ class SparklineChart {
     }
   }
 
-  add(value) {
-    let validatedValue = Math.ceil(value);
+  add(rawValue, printValue = '', postfix = '') {
+    let validatedValue = Math.ceil(rawValue);
     if (this.maxValue) {
       validatedValue = Math.min(validatedValue, this.maxValue);
     }
 
     this._dataArray.push(validatedValue);
     this._dataArray.shift();
-    this._render(validatedValue);
+    this._render(validatedValue, printValue, postfix);
   }
 }
 

@@ -17,7 +17,7 @@ class Header {
   _render() {
     const content = [
       `{bold}${blessed.escape(this.command)}{/bold} `,
-      `[PID: {bold}${this.pid}{/bold}]`,
+      `[PID: {bold}${this.pid}{/bold}] `,
       `[uptime: {bold}${this.time}{/bold}]`,
       '{|}',
       `UTop ver.${this.version}`

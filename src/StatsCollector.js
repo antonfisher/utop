@@ -24,7 +24,7 @@ class StatsCollelector extends EventEmitter {
 
   _sumStats(stats, newStat) {
     stats.cpu += Math.floor(newStat.cpu / cpuCount);
-    stats.mem += Math.floor(newStat.memory / 1024 / 1024); //Mb;
+    stats.mem += Math.floor(newStat.memory);
     return stats;
   }
 
@@ -75,7 +75,7 @@ class StatsCollelector extends EventEmitter {
     this._intervalId = setInterval(() => {
       this.emit('stats', {
         cpu: (Math.sin(+new Date() / 1000) + 1) / 2 * 100,
-        mem: Math.random() * 100 //Mb
+        mem: Math.random() * 2 * 1024 * 1024 * 1024
       });
     }, this.props.interval);
     return this;
