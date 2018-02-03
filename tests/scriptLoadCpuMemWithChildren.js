@@ -25,8 +25,8 @@ function run(title) {
 
 console.log(`Parent process pid: ${process.pid}`);
 
-const cpuCount = os.cpus().length;
+const subprocessCount = os.cpus().length - 2 || 1;
 
-for (let i = 0; i < cpuCount - 1 || i === 0; i++) {
+for (let i = 0; i < subprocessCount; i++) {
   run(i + 1);
 }

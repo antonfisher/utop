@@ -23,21 +23,31 @@ class SparklineChart {
     this.screen = screen;
     this.props = props;
 
+    this._dataArray = [];
+
     this._init();
     this._render();
+
+    this.screen.on('resize', () => {
+      this._init();
+      this._render();
+    });
   }
 
   _init() {
     const countLimit = Math.max(this.screen.width - this.title.length - this.valuePadding, 1);
 
-    this._dataArray = new Array(countLimit).fill(0);
+    let oldDataArray = this._dataArray;
+    if (oldDataArray.length > countLimit) {
+      oldDataArray = this._dataArray.slice(-countLimit);
+    }
 
-    // first one is allways 100% for the right 0-maxValue scale
-    this._dataArray[0] = this.maxValue;
+    this._dataArray = new Array(countLimit - oldDataArray.length).fill(0).concat(oldDataArray);
   }
 
   _render(value = 0) {
-    const graphString = sparkline(this._dataArray)
+    // first one is allways 100% for the right 0-maxValue scale
+    const graphString = sparkline([this.maxValue].concat(this._dataArray.slice(1)))
       .split('')
       .map((s, i) => {
         if (i === 0) {
@@ -73,7 +83,6 @@ class SparklineChart {
 
     this._dataArray.push(validatedValue);
     this._dataArray.shift();
-    this._dataArray[0] = this.maxValue;
     this._render(validatedValue);
   }
 }

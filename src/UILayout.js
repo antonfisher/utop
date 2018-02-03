@@ -14,7 +14,7 @@ function createTopCalculator() {
   };
 }
 
-class UI extends EventEmitter {
+class UILayout extends EventEmitter {
   constructor({command, dashboard, version}) {
     super();
 
@@ -222,4 +222,4 @@ class UI extends EventEmitter {
   }
 }
 
-module.exports = UI;
+module.exports = UILayout;
