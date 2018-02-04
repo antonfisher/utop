@@ -25,7 +25,7 @@ function parseCliArgs({version, description, homepage}, callback) {
       (i) => Math.max(parseFloat(i), 0.1),
       DEFAULT_OPTION_INTERVAL
     )
-    .option('-d, --dashboard', 'use dashboard layout')
+    //.option('-d, --dashboard', 'use dashboard layout')
     .option('--demo', 'run program in demo mode')
     .version(version, '-v, --version')
     .arguments('<command> [options...] *')
@@ -42,7 +42,7 @@ function parseCliArgs({version, description, homepage}, callback) {
       console.log('  Examples:');
       console.log('');
       console.log('    $ utop npm start');
-      console.log('    $ utop -d -- node --inspect server.js');
+      console.log('    $ utop -- node --inspect server.js');
       console.log('    $ utop -i 5 -- tail -f /var/log/syslog');
       console.log('');
     });
