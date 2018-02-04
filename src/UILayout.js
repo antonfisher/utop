@@ -177,6 +177,7 @@ class UILayout extends EventEmitter {
 
     this.screen.render();
 
+    //TODO to separate class
     this._startTime = Math.round(+new Date() / 1000);
     this._updateTimerInterval = setInterval(() => {
       const diff = Math.round(+new Date() / 1000) - this._startTime;
@@ -222,6 +223,10 @@ class UILayout extends EventEmitter {
     this._uiLogBox.log('');
     this._uiLogBox.log(`{red-fg}${err}{/red-fg}`);
     return this;
+  }
+
+  stopTimer() {
+    clearInterval(this._updateTimerInterval);
   }
 
   destroy() {

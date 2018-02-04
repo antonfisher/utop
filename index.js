@@ -78,6 +78,7 @@ parseCliArgs({version, description, homepage}, ({parsedUserCommand, options}) =>
     })
     .on('exit', (code) => {
       const message = `Child process exited with code: ${code}, press Cmd-C to close UTop.`;
+      uiLayout.stopTimer();
       if (code === 0) {
         uiLayout.addLog('');
         uiLayout.addLog(message); //TODO green
