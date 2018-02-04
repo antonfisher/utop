@@ -5,6 +5,7 @@ CLI tool for single process monitoring written on Node.js
 [![Build Status](https://travis-ci.org/antonfisher/utop.svg?branch=master)](https://travis-ci.org/antonfisher/utop)
 [![bitHound](https://www.bithound.io/github/antonfisher/utop/badges/dependencies.svg)](https://www.bithound.io/github/antonfisher/utop/master/dependencies/npm)
 [![npm](https://img.shields.io/npm/v/utop.svg?colorB=brightgreen)](https://www.npmjs.com/package/utop)
+![status](https://img.shields.io/badge/status-beta-lightgray.svg)
 
 ![Main view](https://raw.githubusercontent.com/antonfisher/utop/docs/images/demo.v1.gif)
 
