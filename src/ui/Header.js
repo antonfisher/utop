@@ -2,6 +2,9 @@
 
 const blessed = require('blessed');
 
+const LABEL_APP = 'UTop ver.';
+const LABEL_PID = 'PID: ';
+
 class Header {
   constructor({screen, command, version, pid = '-', time = '--:--:--', ...props}) {
     this.screen = screen;
@@ -15,12 +18,26 @@ class Header {
   }
 
   _render() {
+    let title = blessed.escape(this.command);
+    const limit =
+      this.screen.width -
+      LABEL_PID.length -
+      String(this.pid).length -
+      String(this.time).length -
+      LABEL_APP.length -
+      String(this.version).length -
+      9;
+
+    if (title.length > limit) {
+      title = `${title.substr(0, limit - 3)}...`;
+    }
+
     const content = [
-      `{bold}${blessed.escape(this.command)}{/bold} `,
-      `[PID: {bold}${this.pid}{/bold}] `,
-      `[uptime: {bold}${this.time}{/bold}]`,
+      `{bold}${title}{/bold}`,
       '{|}',
-      `UTop ver.${this.version}`
+      `[${LABEL_PID}{bold}${this.pid}{/bold}] `,
+      `[{bold}${this.time}{/bold}] `,
+      `${LABEL_APP}${this.version}`
     ].join('');
 
     if (this._chart) {
