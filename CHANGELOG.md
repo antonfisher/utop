@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.1.0"></a>
+# [1.1.0](https://github.com/antonfisher/utop/compare/v1.0.1...v1.1.0) (2018-02-04)
+
+
+### Bug Fixes
+
+* disable dashboard feature for first release ([b4d9651](https://github.com/antonfisher/utop/commit/b4d9651))
+* error while exiting after child process exit ([aaa65c7](https://github.com/antonfisher/utop/commit/aaa65c7))
+* show normal exit message if subprocess exits with code 0 ([4b690fc](https://github.com/antonfisher/utop/commit/4b690fc))
+* stop collecting stats after subprocess exits ([caa0499](https://github.com/antonfisher/utop/commit/caa0499))
+* stop timer after subprocess exiting ([809d662](https://github.com/antonfisher/utop/commit/809d662))
+
+
+### Features
+
+* auto format byte values ([6a70d3f](https://github.com/antonfisher/utop/commit/6a70d3f))
+* first version of docs + demo animation ([0daa3a3](https://github.com/antonfisher/utop/commit/0daa3a3))
+* resizable cpu/mem charts ([484f981](https://github.com/antonfisher/utop/commit/484f981))
+* substr long commands in the title ([f6d5624](https://github.com/antonfisher/utop/commit/f6d5624))
+
+
+
 <a name="1.0.1"></a>
 ## [1.0.1](https://github.com/antonfisher/utop/compare/v1.0.0...v1.0.1) (2018-01-31)
 
