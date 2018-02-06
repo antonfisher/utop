@@ -1,10 +1,12 @@
 'use strict';
 
 const EventEmitter = require('events');
+
 const blessed = require('blessed');
-const formatBytes = require('./formatBytes');
-const Header = require('./ui/Header');
-const SparklineChart = require('./ui/SparklineChart');
+
+const formatBytes = require('../helpers/formatBytes');
+const Header = require('../ui/Header');
+const SparklineChart = require('../ui/SparklineChart');
 
 const SPARKLINE_VALUE_PADDING = 6;
 
@@ -17,7 +19,7 @@ function createTopCalculator() {
   };
 }
 
-class UILayout extends EventEmitter {
+class UIRenderer extends EventEmitter {
   constructor({command, dashboard, version}) {
     super();
 
@@ -235,4 +237,4 @@ class UILayout extends EventEmitter {
   }
 }
 
-module.exports = UILayout;
+module.exports = UIRenderer;

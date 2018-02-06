@@ -1,18 +1,19 @@
-#!/usr/bin/env node
-
 'use strict';
+
+//polyfills
+require('core-js/fn/string/pad-start');
 
 const {resolve} = require('path');
 
-const {version, description, homepage} = require('./package.json');
-const StatsCollector = require('./src/StatsCollector');
-const parseCliArgs = require('./src/parseCliArgs');
-const UserProcess = require('./src/UserProcess');
-const UILayout = require('./src/UILayout');
+const {version, description, homepage} = require('../package.json');
+const StatsCollector = require('./modules/StatsCollector');
+const parseCliArgs = require('./helpers/parseCliArgs');
+const UserProcess = require('./modules/UserProcess');
+const UIRenderer = require('./modules/UIRenderer');
 
-const DEMO_SCRIPT_PATH = resolve(__dirname, './tests/scriptDemoPrintDate.js');
+const DEMO_SCRIPT_PATH = resolve(__dirname, '../tests/scriptDemoPrintDate.js');
 
-let uiLayout;
+let uiRenderer;
 let userProcess;
 let statsCollector;
 let killing = false;
@@ -33,8 +34,8 @@ function exitProcess(err) {
   if (statsCollector) {
     statsCollector.destroy();
   }
-  if (uiLayout) {
-    uiLayout.destroy();
+  if (uiRenderer) {
+    uiRenderer.destroy();
   }
   if (userProcess && userProcess.process.pid) {
     console.log(`Exiting subprocess, PID ${userProcess.process.pid}...`);
@@ -59,7 +60,7 @@ parseCliArgs({version, description, homepage}, ({parsedUserCommand, options}) =>
     userCommand = {command: 'node', args: [DEMO_SCRIPT_PATH]};
   }
 
-  uiLayout = new UILayout({
+  uiRenderer = new UIRenderer({
     command: options.demo ? '[UTop DEMO]' : userCommand.fullCommand,
     dashboard: options.dashboard,
     version
@@ -68,22 +69,22 @@ parseCliArgs({version, description, homepage}, ({parsedUserCommand, options}) =>
     .render();
 
   userProcess = new UserProcess(userCommand)
-    .on('stdout', (message) => uiLayout.addLog(message))
-    .on('stderr', (message) => uiLayout.addError(message))
+    .on('stdout', (message) => uiRenderer.addLog(message))
+    .on('stderr', (message) => uiRenderer.addError(message))
     .on('error', (message) => {
-      uiLayout.addError(message);
+      uiRenderer.addError(message);
       if (statsCollector) {
         setTimeout(() => statsCollector.destroy(), options.interval);
       }
     })
     .on('exit', (code) => {
       const message = `Child process exited with code: ${code}, press Cmd-C to close UTop.`;
-      uiLayout.stopTimer();
+      uiRenderer.stopTimer();
       if (code === 0) {
-        uiLayout.addLog('');
-        uiLayout.addLog(message); //TODO green
+        uiRenderer.addLog('');
+        uiRenderer.addLog(message); //TODO green
       } else {
-        uiLayout.addError(message);
+        uiRenderer.addError(message);
       }
       if (statsCollector) {
         setTimeout(() => statsCollector.destroy(), options.interval);
@@ -91,12 +92,12 @@ parseCliArgs({version, description, homepage}, ({parsedUserCommand, options}) =>
     })
     .run();
 
-  uiLayout.setPid(userProcess.process.pid);
+  uiRenderer.setPid(userProcess.process.pid);
 
   statsCollector = new StatsCollector({
     pid: userProcess.process.pid,
     interval: options.interval
-  }).on('stats', ({cpu, mem}) => uiLayout.addCpu(cpu).addMem(mem));
+  }).on('stats', ({cpu, mem}) => uiRenderer.addCpu(cpu).addMem(mem));
 
   if (options.demo) {
     statsCollector.demo();

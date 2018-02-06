@@ -11,10 +11,10 @@ const calculate = () => {
   const startDate = +new Date();
   console.log(`${message} ...`);
   let value = 1;
-  for (let i = 0; i < 2 ** power; i++) {
+  for (let i = 0; i < Math.pow(2, power); i++) {
     value *= Math.sqrt(Math.random());
   }
-  new Array(2 ** power).fill(' ');
+  new Array(Math.pow(2, power)).fill(' ');
   const ms = +new Date() - startDate;
   console.log(`${message} takes: ${ms}ms`);
   if (ms > INTERVAL * 5 || power < START_POWER) {
