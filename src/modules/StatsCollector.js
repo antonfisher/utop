@@ -67,6 +67,7 @@ class StatsCollelector extends EventEmitter {
   }
 
   run() {
+    this._collectPidStats();
     this._intervalId = setInterval(() => this._collectPidStats(), this.props.interval);
     return this;
   }
