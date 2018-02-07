@@ -3,6 +3,7 @@
 const commander = require('commander');
 
 const DEFAULT_OPTION_INTERVAL = 0.5;
+const DEFAULT_OPTION_CHART_HEIGHT = 1;
 
 function addRestParamsToArgs(command, parsedArgs, rawArgs) {
   let args = parsedArgs;
@@ -25,7 +26,12 @@ function parseCliArgs({version, description, homepage}, callback) {
       (i) => Math.max(parseFloat(i), 0.1),
       DEFAULT_OPTION_INTERVAL
     )
-    //.option('-d, --dashboard', 'use dashboard layout')
+    .option(
+      '-h, --chart-height <n>',
+      'chart height in rows',
+      (i) => Math.max(parseInt(i, 10), 1),
+      DEFAULT_OPTION_CHART_HEIGHT
+    )
     .option('--demo', 'run program in demo mode')
     .version(version, '-v, --version')
     .arguments('<command> [options...] *')
@@ -57,7 +63,7 @@ function parseCliArgs({version, description, homepage}, callback) {
     parsedUserCommand,
     options: {
       interval: commander.interval * 1000,
-      dashboard: commander.dashboard,
+      chartHeight: commander.chartHeight,
       demo: commander.demo
     }
   });

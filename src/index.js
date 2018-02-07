@@ -62,7 +62,7 @@ parseCliArgs({version, description, homepage}, ({parsedUserCommand, options}) =>
 
   uiRenderer = new UIRenderer({
     command: options.demo ? '[UTop DEMO]' : userCommand.fullCommand,
-    dashboard: options.dashboard,
+    chartHeight: options.chartHeight,
     version
   })
     .on('exit', () => exitProcess())

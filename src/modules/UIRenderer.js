@@ -20,10 +20,10 @@ function createTopCalculator() {
 }
 
 class UIRenderer extends EventEmitter {
-  constructor({command, dashboard, version}) {
+  constructor({command, chartHeight, version}) {
     super();
 
-    this.props = {command, dashboard, version};
+    this.props = {command, chartHeight, version};
 
     this._init();
   }
@@ -42,34 +42,7 @@ class UIRenderer extends EventEmitter {
     });
   }
 
-  _renderSectionLine({label, ...props}) {
-    return blessed.line({
-      parent: this.screen,
-      height: 1,
-      label: ` ${label} `,
-      orientation: 'horizontal',
-      border: {
-        type: 'line'
-      },
-      style: {
-        fg: 'yellow'
-      },
-      ...props
-    });
-  }
-
   _renderChart(props) {
-    const chart = blessed.box({
-      parent: this.screen,
-      ...props
-    });
-
-    chart.add = () => {};
-
-    return chart;
-  }
-
-  _renderSparkline(props) {
     return new SparklineChart({screen: this.screen, valuePadding: SPARKLINE_VALUE_PADDING, ...props});
   }
 
@@ -128,50 +101,23 @@ class UIRenderer extends EventEmitter {
   }
 
   render() {
-    const chartHeight = Math.ceil(this.screen.height / 4);
     const calculateTop = createTopCalculator();
 
     this._uiHeader = this._renderTitle({top: calculateTop(2)});
 
-    if (this.props.dashboard) {
-      this._renderSectionLine({
-        top: calculateTop(1),
-        label: 'CPU'
-      });
+    this._uiCpuChart = this._renderChart({
+      top: calculateTop(this.props.chartHeight + 1),
+      height: this.props.chartHeight,
+      maxValue: 100,
+      title: 'CPU:'
+    });
 
-      this._uiCpuChart = this._renderChart({
-        top: calculateTop(chartHeight),
-        height: chartHeight
-      });
-
-      this._renderSectionLine({
-        top: calculateTop(1),
-        label: 'Memory'
-      });
-
-      this._uiMemChart = this._renderChart({
-        top: calculateTop(chartHeight),
-        height: chartHeight
-      });
-
-      this._renderSectionLine({
-        top: calculateTop(1),
-        label: 'Log'
-      });
-    } else {
-      this._uiCpuChart = this._renderSparkline({
-        top: calculateTop(2),
-        maxValue: 100,
-        title: 'CPU:'
-      });
-
-      this._uiMemChart = this._renderSparkline({
-        top: calculateTop(2),
-        title: 'Mem:',
-        colorOk: 'cyan',
-        colorWarn: 'blue'
-      });
-    }
+    this._uiMemChart = this._renderChart({
+      top: calculateTop(this.props.chartHeight + 1),
+      height: this.props.chartHeight,
+      title: 'Mem:',
+      colorOk: 'cyan'
+    });
 
     this._uiLogBox = this._renderLogBox({
       top: calculateTop()
