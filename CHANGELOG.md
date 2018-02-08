@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.3.0"></a>
+# [1.3.0](https://github.com/antonfisher/utop/compare/v1.2.0...v1.3.0) (2018-02-08)
+
+
+### Bug Fixes
+
+* add -h option to docs ([fc40e47](https://github.com/antonfisher/utop/commit/fc40e47))
+* start collecting stats w/o interval delay ([cec5e91](https://github.com/antonfisher/utop/commit/cec5e91))
+
+
+### Features
+
+* adjustable chart height ([f2cce35](https://github.com/antonfisher/utop/commit/f2cce35))
+
+
+
 <a name="1.2.0"></a>
 # [1.2.0](https://github.com/antonfisher/utop/compare/v1.1.0...v1.2.0) (2018-02-06)
 
