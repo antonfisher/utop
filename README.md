@@ -34,11 +34,25 @@ $ utop
 
   Options:
 
-    -i, --interval <n>  update interval in seconds (default: 0.5)
-    --demo              run program in demo mode
-    -v, --version       output the version number
-    -h, --help          output usage information
+    -i, --interval <n>      update interval in seconds (default: 0.5)
+    -h, --chart-height <n>  chart height in rows (default: 1)
+    --demo                  run program in demo mode
+    -v, --version           output the version number
+    -h, --help              output usage information
 ```
+
+### Chart height
+```bash
+# default
+$ utop -- tar -xzvf backup.tar.gz
+```
+![UTop -h 1](https://raw.githubusercontent.com/antonfisher/utop/docs/images/utop-h-1.png)
+
+```bash
+# height = 3 rows
+$ utop -h 3 -- tar -xzvf backup.tar.gz
+```
+![UTop -h 3](https://raw.githubusercontent.com/antonfisher/utop/docs/images/utop-h-3.png)
 
 ## Requirements
 Node.js v6.0.0 or higher.
