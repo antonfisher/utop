@@ -44,15 +44,19 @@ $ utop
 ### Chart height
 ```bash
 # default
-$ utop -- tar -xzvf backup.tar.gz
+$ utop --demo
 ```
-![UTop -h 1](https://raw.githubusercontent.com/antonfisher/utop/docs/images/utop-h-1.png)
+<kbd>
+<img alt="UTop -h 1" src="https://raw.githubusercontent.com/antonfisher/utop/docs/images/utop-h-1.png" />
+</kbd>
 
 ```bash
 # height = 3 rows
-$ utop -h 3 -- tar -xzvf backup.tar.gz
+$ utop --demo -h 3
 ```
-![UTop -h 3](https://raw.githubusercontent.com/antonfisher/utop/docs/images/utop-h-3.png)
+<kbd>
+<img alt="UTop -h 3" src="https://raw.githubusercontent.com/antonfisher/utop/docs/images/utop-h-3.png"/>
+</kbd>
 
 ## Requirements
 Node.js v6.0.0 or higher.
