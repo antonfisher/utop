@@ -49,6 +49,7 @@ $ utop --demo
 <kbd>
 <img alt="UTop -h 1" src="https://raw.githubusercontent.com/antonfisher/utop/docs/images/utop-h-1.png" />
 </kbd>
+<br><br>
 
 ```bash
 # height = 3 rows
@@ -57,6 +58,7 @@ $ utop --demo -h 3
 <kbd>
 <img alt="UTop -h 3" src="https://raw.githubusercontent.com/antonfisher/utop/docs/images/utop-h-3.png"/>
 </kbd>
+<br>
 
 ## Requirements
 Node.js v6.0.0 or higher.
