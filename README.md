@@ -7,9 +7,7 @@ CLI tool for single process monitoring written in Node.js
 [![npm](https://img.shields.io/npm/v/utop.svg?colorB=brightgreen)](https://www.npmjs.com/package/utop)
 ![status](https://img.shields.io/badge/status-beta-lightgray.svg)
 
-<center>
 ![Main view](https://raw.githubusercontent.com/antonfisher/utop/docs/images/demo.v1.gif)
-</center>
 
 ## Try w/o installation
 ```bash
@@ -48,17 +46,13 @@ $ utop
 # default
 $ utop -- tar -xzvf backup.tar.gz
 ```
-<center>
 ![UTop -h 1](https://raw.githubusercontent.com/antonfisher/utop/docs/images/utop-h-1.png)
-</center>
 
 ```bash
 # height = 3 rows
 $ utop -h 3 -- tar -xzvf backup.tar.gz
 ```
-<center>
 ![UTop -h 3](https://raw.githubusercontent.com/antonfisher/utop/docs/images/utop-h-3.png)
-</center>
 
 ## Requirements
 Node.js v6.0.0 or higher.
