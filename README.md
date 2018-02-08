@@ -6,6 +6,7 @@ CLI tool for single process monitoring written in Node.js
 [![bitHound](https://www.bithound.io/github/antonfisher/utop/badges/dependencies.svg)](https://www.bithound.io/github/antonfisher/utop/master/dependencies/npm)
 [![npm](https://img.shields.io/npm/v/utop.svg?colorB=brightgreen)](https://www.npmjs.com/package/utop)
 ![status](https://img.shields.io/badge/status-beta-lightgray.svg)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fantonfisher%2Futop.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fantonfisher%2Futop?ref=badge_shield)
 
 ![Main view](https://raw.githubusercontent.com/antonfisher/utop/docs/images/demo.v1.gif)
 
@@ -55,3 +56,6 @@ npm run build
 
 ## License
 MIT License. Free use and change.
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fantonfisher%2Futop.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fantonfisher%2Futop?ref=badge_large)
