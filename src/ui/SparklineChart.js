@@ -68,7 +68,7 @@ class SparklineChart {
           } else if (value <= j * rowDataHeight) {
             rowValue = 0;
           } else {
-            rowValue = 100 * (value - j * rowDataHeight) / rowDataHeight;
+            rowValue = (100 * (value - j * rowDataHeight)) / rowDataHeight;
           }
         }
 

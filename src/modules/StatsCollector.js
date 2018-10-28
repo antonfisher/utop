@@ -8,12 +8,12 @@ const pidUsage = require('pidusage');
 
 const cpuCount = os.cpus().length;
 
-class StatsCollelector extends EventEmitter {
+class StatsCollector extends EventEmitter {
   constructor({pid, interval}) {
     super();
 
     if (typeof interval === 'undefined' || interval <= 0) {
-      throw new Error('[StatsCollelector] interval property has to be greater than 0');
+      throw new Error('[StatsCollector] interval property has to be greater than 0');
     }
 
     this.props = {pid, interval};
@@ -45,7 +45,7 @@ class StatsCollelector extends EventEmitter {
         const childrenCount = children.length;
         let childrenChecked = 0;
         children.forEach(({PID}) =>
-          pidUsage.stat(PID, (err, stat) => {
+          pidUsage(PID, (err, stat) => {
             childrenChecked++;
             if (!err) {
               stats = this._sumStats(stats, stat);
@@ -56,7 +56,7 @@ class StatsCollelector extends EventEmitter {
           })
         );
       } else {
-        pidUsage.stat(this.props.pid, (err, stat) => {
+        pidUsage(this.props.pid, (err, stat) => {
           if (!err) {
             stats = this._sumStats(stats, stat);
           }
@@ -75,7 +75,7 @@ class StatsCollelector extends EventEmitter {
   demo() {
     this._intervalId = setInterval(() => {
       this.emit('stats', {
-        cpu: (Math.sin(+new Date() / 1000) + 1) / 2 * 100,
+        cpu: ((Math.sin(+new Date() / 1000) + 1) / 2) * 100,
         mem: Math.random() * 2 * 1024 * 1024 * 1024
       });
     }, this.props.interval);
@@ -87,4 +87,4 @@ class StatsCollelector extends EventEmitter {
   }
 }
 
-module.exports = StatsCollelector;
+module.exports = StatsCollector;

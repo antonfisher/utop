@@ -43,24 +43,24 @@
   "homepage": "https://github.com/antonfisher/utop",
   "dependencies": {
     "blessed": "0.1.81",
-    "commander": "2.14.0",
-    "core-js": "2.5.3",
-    "pidusage": "1.2.0",
+    "commander": "2.19.0",
+    "core-js": "2.5.7",
+    "pidusage": "2.0.17",
     "ps-tree": "1.1.0",
     "sparkline": "0.2.0",
     "terminate": "2.1.0"
   },
   "devDependencies": {
     "babel-cli": "6.26.0",
-    "babel-core": "6.26.0",
+    "babel-core": "6.26.3",
     "babel-eslint": "8.2.1",
     "babel-preset-env": "1.6.1",
     "babel-preset-stage-0": "6.24.1",
     "del-cli": "1.1.0",
-    "eslint": "4.17.0",
-    "eslint-config-eslint": "4.0.0",
-    "eslint-config-prettier": "2.9.0",
-    "eslint-plugin-prettier": "2.6.0",
-    "prettier": "1.10.2"
+    "eslint": "5.8.0",
+    "eslint-config-eslint": "5.0.1",
+    "eslint-config-prettier": "3.1.0",
+    "eslint-plugin-prettier": "3.0.0",
+    "prettier": "1.14.3"
   }
 }

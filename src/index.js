@@ -17,19 +17,19 @@ let uiRenderer;
 let userProcess;
 let statsCollector;
 let killing = false;
-let killingAtempts = 0;
+let killingAttempts = 0;
 
 function exitProcess(err) {
   if (err) {
     console.log('ERROR:', err); //TODO red
   }
 
-  if (killing && killingAtempts > 2) {
+  if (killing && killingAttempts > 2) {
     console.log(`Force process exit. Subprocess PID is ${userProcess.process.pid}.`); //TODO red
     process.exit();
   }
   killing = true;
-  killingAtempts++;
+  killingAttempts++;
 
   if (statsCollector) {
     statsCollector.destroy();
