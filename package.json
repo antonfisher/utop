@@ -44,23 +44,23 @@
   "dependencies": {
     "blessed": "0.1.81",
     "commander": "2.19.0",
-    "core-js": "2.5.7",
+    "core-js": "2.6.3",
     "pidusage": "2.0.17",
-    "ps-tree": "1.1.0",
+    "ps-tree": "1.2.0",
     "sparkline": "0.2.0",
-    "terminate": "2.1.0"
+    "terminate": "2.1.2"
   },
   "devDependencies": {
     "babel-cli": "6.26.0",
     "babel-core": "6.26.3",
-    "babel-eslint": "8.2.1",
-    "babel-preset-env": "1.6.1",
+    "babel-eslint": "10.0.1",
+    "babel-preset-env": "1.7.0",
     "babel-preset-stage-0": "6.24.1",
     "del-cli": "1.1.0",
-    "eslint": "5.8.0",
+    "eslint": "5.12.1",
     "eslint-config-eslint": "5.0.1",
-    "eslint-config-prettier": "3.1.0",
-    "eslint-plugin-prettier": "3.0.0",
-    "prettier": "1.14.3"
+    "eslint-config-prettier": "4.0.0",
+    "eslint-plugin-prettier": "3.0.1",
+    "prettier": "1.16.1"
   }
 }
